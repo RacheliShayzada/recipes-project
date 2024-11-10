@@ -1,4 +1,3 @@
-
 import ShowRecipes from '@/components/ShowRecipes/ShowRecipes';
 import React from 'react';
 import { Recipe } from '@/types/types'

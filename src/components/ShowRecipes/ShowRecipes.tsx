@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import RecipesCard from '@/components/recipesCard/RecipesCard';
 import { Recipe } from '@/types/types';
