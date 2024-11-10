@@ -27,17 +27,21 @@ function close(){
 }
 
     return(
-        <div className={`w-full h-full absolute bg-gray-700 bg-opacity-80 flex flex-row z-50`}>
-            <div className=' m-10 bg-white bg-opacity-100 flex-1 absolute left-0 rounded-lg'>
-                <button onClick={close}>X</button>
-                <div className=''>
-                    <h1>{localRecipe.name}</h1>
-                    <img src={localRecipe.imageUrl} alt={localRecipe.name} width={200} height={200}/>
-                    <p>{localRecipe.instructions}</p>
-
+        <div className={`w-screen h-screen bg-gray-700 bg-opacity-80`}>
+            <div id='div2' className='absolute top-0 right-0 w-1/3 h-full bg-white rounded-lg p-4'>
+                <button onClick={close} className=''>X</button>
+                <div className='flex flex-row h-1/3'>
+                    <img src={localRecipe.imageUrl} alt={localRecipe.name} width={200} height={200} className='rounded-lg'/>
+                    <div>
+                        <h1>{localRecipe.name}</h1>
+                        <p>{localRecipe.category}</p>
+                        <p>star</p>
+                        <p>{localRecipe.ingredients}</p>
+                    </div>
+                    
                 </div> 
                 <div>
-                    <p>{localRecipe.shortDescription}</p>
+                     <p>{localRecipe.instructions}</p>
                 </div>
             </div>            
         </div>
