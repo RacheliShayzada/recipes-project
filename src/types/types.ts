@@ -1,5 +1,5 @@
 export type Recipe = {
-    id: string;                // מ��הה מיו��ד למתכו��
+    id?: string;                // מ��הה מיו��ד למתכו��
     name: string;               // שם המתכון
     imageUrl: string;           // URL של התמונה
     category: string[];           // קטגוריות של המתכון
@@ -10,7 +10,7 @@ export type Recipe = {
 
 
   export type Category={
-    id: string;                // מ��הה מיו��ד למתכו��
+    id?: string;                // מ��הה מיו��ד למתכו��
     name: string;             // שם הק����ו��י��
   }
 
