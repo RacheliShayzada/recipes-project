@@ -51,3 +51,10 @@ export async function getDocumentsByCategory(client: MongoClient, collectionName
     const documents = await collection.find({ category: category }).toArray();
     return documents;
 }
+
+
+export async function getAllCategory(client: any, collection: string) {
+    const db = client.db('mini_project');
+    const documents = await db.collection(collection).find().toArray();
+    return documents;
+ }
