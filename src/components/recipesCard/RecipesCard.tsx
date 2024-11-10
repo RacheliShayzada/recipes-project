@@ -1,18 +1,10 @@
 "use client";
 
 import React, { useState } from 'react';
+import {Recipe} from '@/types/types'
 import styles from './RecipesCard.module.css';
 
-export type Recipe = {
-  name: string;               // שם המתכון
-  imageUrl: string;           // URL של התמונה
-  category: string[];         // קטגוריות של המתכון
-  ingredients: string[];      // רשימת מצרכים (מחרוזות)
-  instructions: string;       // הוראות הכנה
-  shortDescription: string;   // תאור קצר של המתכון
-};
-
-type RecipesCardProps = {
+export type RecipesCardProps = {
   recipe: Recipe;
   isFavorite: boolean;
 };
