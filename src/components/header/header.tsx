@@ -32,7 +32,7 @@ const Header = () => {
         console.log("Add Recipe");
     }
 
-    const onCategoryChange = (category) => {
+    const onCategoryChange = (category:string) => {
         console.log('Selected category:', category);
         setSelectedCategorie(category);
     };
