@@ -22,6 +22,7 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/add-recipe/page.tsx", "src/app/page.jsx", "next.config.js"],
+
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/recipesCard/RecipesCard.tsx", "next.config.js"],
   "exclude": ["node_modules"]
 }
