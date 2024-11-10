@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 /next.config.js
+next.config.js
+package-lock.json
+package.json
 /.pnp
 .pnp.*
 .yarn/*
