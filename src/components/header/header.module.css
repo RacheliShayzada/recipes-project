@@ -1,0 +1,44 @@
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .header_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .search_filter {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .add_recipe_button {
+    background-color: #6c63ff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .tabs {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .tab_button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-bottom: 2px solid transparent;
+  }
+  
+  .tab_button.active {
+    border-color: #6c63ff;
+  }
+  
