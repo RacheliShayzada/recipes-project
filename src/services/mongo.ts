@@ -33,5 +33,21 @@ export async function getAllDocuments(client: any, collection: string) {
 }
 
 
+export async function getDocumentById(client: MongoClient, collectionName: string, id: ObjectId) {
+    const collection = client.db('mini_project').collection(collectionName);
+    return await collection.findOne({ _id: id });
+}
 
 
+
+export async function getDocumentsByIds(client: MongoClient, collectionName: string, ids: ObjectId[]) {
+    const collection = client.db('mini_project').collection(collectionName);
+    return await collection.find({ _id: { $in: ids } }).toArray();
+}
+
+export async function getDocumentsByCategory(client: MongoClient, collectionName: string, category: string) {
+    const db = client.db('mini_project');
+    const collection = db.collection(collectionName);
+    const documents = await collection.find({ category: category }).toArray();
+    return documents;
+}
