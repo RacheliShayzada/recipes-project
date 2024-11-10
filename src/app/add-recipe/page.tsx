@@ -1,38 +1,53 @@
-// src/app/add-recipe/AddRecipe.tsx
 "use client";
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-// import { addRecipeToDB } from "../../service/respy";
+import { createRecipe } from "@/services/recipe";
 import styles from "./addRecipe.module.css";
 
 const recipeSchema = z.object({
   recipe_name: z.string().min(1, "Name is required"),
-  category: z.enum(["a", "b", "c"], {
-    required_error: "Category is required",
-    invalid_type_error: "Please select a valid category",
-  }),
+  category: z.string().nonempty("Category is required"),
   imageUrl: z.string().url("Must be a valid URL"),
   ingredients: z.array(z.string()).min(1, "At least one ingredient is required"),
   instructions: z.string().min(1, "Instructions are required"),
+  shortDescription: z.string().optional(),
 });
 
 type RecipeFormData = z.infer<typeof recipeSchema>;
 
 const AddRecipe: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<RecipeFormData>({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<RecipeFormData>({
     resolver: zodResolver(recipeSchema),
   });
   const [ingredients, setIngredients] = useState<string[]>([""]);
+  const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);  // Track loading state
 
   const onSubmit = async (data: RecipeFormData) => {
+    console.log("Form Data Submitted:", data); // Debugging: log the form data
+    setLoading(true); // Set loading to true when submitting
+
     try {
-      // await addRecipeToDB(data);
-      console.log("Recipe saved to the database:", data);
+      const response = await createRecipe({
+        name: data.recipe_name,
+        imageUrl: data.imageUrl,
+        category: [data.category], 
+        ingredients: data.ingredients,
+        instructions: data.instructions,
+        shortDescription: data.shortDescription || "", 
+      });
+
+      console.log("Response from API:", response); // Debugging: check the API response
+      setMessage("Recipe saved successfully!");
+      reset();  // Reset the form if the submission was successful
     } catch (error) {
-      console.error("Failed to save recipe:", error);
+      console.error("Failed to save recipe:", error); // Debugging: log any error
+      setMessage("Failed to save recipe. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after API call
     }
   };
 
@@ -46,6 +61,11 @@ const AddRecipe: React.FC = () => {
         &#8592; Back
       </div>
       <h2 className={styles.title}>Add Recipe</h2>
+      
+      {message && <p className={styles.message}>{message}</p>} {/* Display success or error message */}
+
+      {loading && <p>Loading...</p>} {/* Show loading message */}
+
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <input
           className={styles.input}
@@ -99,7 +119,15 @@ const AddRecipe: React.FC = () => {
         ></textarea>
         {errors.instructions && <p>{errors.instructions.message}</p>}
 
-        <button type="submit" className={styles.addButton}>Add</button>
+        <input
+          className={styles.input}
+          placeholder="Short Description"
+          {...register("shortDescription")}
+        />
+
+        <button type="submit" className={styles.addButton} disabled={loading}>
+          Add
+        </button>
       </form>
     </div>
   );
