@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createRecipe } from "@/services/recipe";
-import { getAllCategory } from "@/services/category";
+import { getAllCategorys } from "@/services/category";
 import styles from "./addRecipe.module.css";
 
 const recipeSchema = z.object({
@@ -29,7 +29,7 @@ const AddRecipe: React.FC = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const categoryData = await getAllCategory();
+        const categoryData = await getAllCategorys();
         setCategories(categoryData.map((cat) => cat.name));
       } catch (error) {
         console.error("Error fetching categories:", error);
