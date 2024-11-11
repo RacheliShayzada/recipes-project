@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import {Recipe} from '@/types/types'
+import { Recipe } from '@/types/types';
 import styles from './RecipesCard.module.css';
 
 export type RecipesCardProps = {
@@ -12,8 +12,17 @@ export type RecipesCardProps = {
 function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
   const [favorite, setFavorite] = useState(isFavorite);
 
+  const toggleFavoriteInLocalStorage = () => {
+    const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
+    const updatedFavorites = favorite
+      ? favorites.filter(id => id !== recipe._id) 
+      : [...favorites, recipe._id]; 
+    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+    setFavorite(!favorite); 
+  };
+
   const handleFavoriteClick = () => {
-    setFavorite(!favorite);
+    toggleFavoriteInLocalStorage();
   };
 
   return (
@@ -31,7 +40,7 @@ function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
             onClick={handleFavoriteClick}
             style={{ cursor: 'pointer' }}
           >
-            {favorite ? '🌟':'⭐'}
+            {favorite ? '🌟' : '⭐'}
           </span>
         </div>
         <p className={styles.category}>{recipe.category.join(', ')}</p>
@@ -43,4 +52,3 @@ function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
 }
 
 export default RecipesCard;
-

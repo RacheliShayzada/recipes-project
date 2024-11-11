@@ -18,7 +18,7 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
         <RecipesCard
           key={index}
           recipe={recipe}
-          isFavorite={favoriteRecipes.includes(recipe.id||'')} 
+          isFavorite={favoriteRecipes.includes(recipe._id||'')} 
         />
       )): <p>Loading...</p>}
     </div>

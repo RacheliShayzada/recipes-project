@@ -5,6 +5,7 @@ import { MongoClient, ObjectId } from 'mongodb';
 export async function POST(request: Request) {
     try {
         const { ids } = await request.json();
+        console.log(ids,"POST request");
         const objectIds = ids.map((id: string) => new ObjectId(id));
         const client = await connectDatabase();
         const documents = await getDocumentsByIds(client, 'recipes', objectIds);

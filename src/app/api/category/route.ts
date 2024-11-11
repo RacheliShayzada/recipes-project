@@ -7,7 +7,6 @@ export async function GET(request: Request) {
 
         const documents = await getAllCategory(client, 'category');
 
-        console.log(documents)
         return NextResponse.json({ documents });
     } catch (error) {
         return NextResponse.json({ message: 'Failed to fetch documents' }, { status: 500 });

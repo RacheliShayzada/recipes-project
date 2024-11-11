@@ -1,5 +1,4 @@
 "use client";
-
 import Header from '@/components/header/header';
 import ShowRecipes from '@/components/ShowRecipes/ShowRecipes';
 import { getAllRecipes, getRecipeByCategory, getRecipeByIds } from '@/services/recipe';
@@ -32,26 +31,34 @@ function Home() {
   }, []);
 
   const filteredRecipes = async () => {
-    let filtered:Recipe[]  =  [];
+    let filtered: Recipe[] = [];
 
     if (selectedTab === 'favorites') {
       const favoriteRecipes: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
-      filtered = await getRecipeByIds(favoriteRecipes);
-      if(selectedCategorie)
-         filtered = filtered.filter((recipe) => recipe.category.includes(selectedCategorie));
-    }else{
-      if(selectedCategorie)
-        filtered = await getRecipeByCategory(selectedCategorie);
+      const res = await getRecipeByIds(favoriteRecipes);
+      filtered = (res as unknown as { documents: Recipe[] }).documents; // קבלת המערך מתוך השדה documents
+      if (selectedCategorie) {
+        filtered = filtered.filter((recipe) => recipe.category.includes(selectedCategorie));
+      }
+    } else {
+      if (selectedCategorie) {
+        const res = await getRecipeByCategory(selectedCategorie);
+        filtered = (res as unknown as { documents: Recipe[] }).documents; // קבלת המערך מתוך השדה documents גם עבור קטגוריות
+      }
     }
-    if(selectedTab !== 'favorites' && !selectedCategorie ){
-      filtered = await fetchData();
+
+    if (selectedTab !== 'favorites' && !selectedCategorie) {
+      const res = await fetchData();
+      filtered = res;
     }
+
     if (searchTerm) {
       filtered = filtered.filter((recipe) => recipe.name.toLowerCase().includes(searchTerm.toLowerCase()));
     }
 
     setRecipes(filtered);
   };
+
 
   useEffect(() => {
     filteredRecipes();
@@ -76,6 +83,7 @@ function Home() {
         handleTabClick={handleTabClick}
         handleCategorieClick={handleCategorieClick}
         selectedTab={selectedTab}
+        selectedCategory={selectedCategorie} // העברת הקטגוריה הנבחרת כ-prop
       />
       <ShowRecipes recipes={recipes} />
     </div>
