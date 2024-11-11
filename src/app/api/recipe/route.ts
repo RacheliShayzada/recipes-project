@@ -6,8 +6,6 @@ export async function GET(request: Request) {
         const client = await connectDatabase();
 
         const documents = await getAllDocuments(client, 'recipes');
-
-        console.log(documents)
         return NextResponse.json({ documents });
     } catch (error) {
         // Handle errors

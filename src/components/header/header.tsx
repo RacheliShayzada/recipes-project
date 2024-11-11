@@ -5,14 +5,14 @@ import { getAllCategorys } from '@/services/category'
 import styles from './header.module.css';
 
 type HeaderProps = {
-    handleCategorieClick: any,
-    handleTabClick: any,
-    handleSearch: any,
-    selectedTab:string
-}
+    handleCategorieClick: (category: string) => void;
+    handleTabClick: (tab: string) => void;
+    handleSearch: (term: string) => void;
+    selectedTab: string;
+    selectedCategory: string;
+};
 
-const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTab }: HeaderProps) => {
-    const router = useRouter();
+const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTab, selectedCategory }: HeaderProps) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [categories, setCategories] = useState<string[]>([]);
 
@@ -28,7 +28,8 @@ const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTa
         fetchCategories();
       }, []);
 
-    const handleSearchChange = (e: any) => {
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchTerm(value);
     };
@@ -45,10 +46,12 @@ const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTa
         <>
             <header className={styles.header}>
                 <div className={styles.header_top}>
-                    <h1>Recipes</h1>
-
-                    <div className={styles.search_filter}>
-                        <select onChange={(e) => onCategoryChange(e.target.value)}>
+                    <h1 className={styles.header_text}><strong>Recipes</strong></h1>
+                    <select
+                            onChange={(e) => onCategoryChange(e.target.value)}
+                            value={selectedCategory}
+                            className={styles.customSelect}
+                        >
                             <option value="">Pick a Category</option>
                             {categories.map((category) => (
                                 <option key={category} value={category}>
@@ -56,40 +59,37 @@ const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTa
                                 </option>
                             ))}
                         </select>
+                    <div className={styles.search_filter}>
 
                         <input
                             type="text"
                             placeholder="Search"
                             value={searchTerm}
                             onChange={handleSearchChange}
+                            className={styles.customInput}
                         />
-                        <button onClick={search} className={styles.add_recipe_button}>
-                            search
+                        <button onClick={search} className={styles.customButton}>
+                            Search
                         </button>
                     </div>
-
-                    <button onClick={onAddRecipe} className={styles.add_recipe_button}>
-                        Add Recipe
-                    </button>
                 </div>
 
                 <div className={styles.tabs}>
                     <button
-                        className={`tab_button ${selectedTab === 'all' ? 'active' : ''}`}
-                        onClick={() => handleTabChange('all')}>
+                        className={`${styles.tab_button} ${selectedTab === 'all' ? styles.active : ''}`}
+                        onClick={() => handleTabChange('all')}
+                    >
                         All Recipes
                     </button>
                     <button
-                        className={`tab_button ${selectedTab === 'favorites' ? 'active' : ''}`}
-                        onClick={() => handleTabChange('favorites')}>
+                        className={`${styles.tab_button} ${selectedTab === 'favorites' ? styles.active : ''}`}
+                        onClick={() => handleTabChange('favorites')}
+                    >
                         Favorites
                     </button>
                 </div>
             </header>
-
         </>
-
-
     );
 };
 

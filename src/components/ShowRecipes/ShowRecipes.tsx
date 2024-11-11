@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import RecipesCard from '@/components/recipesCard/RecipesCard';
 import { Recipe } from '@/types/types';
@@ -16,7 +18,7 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
         <RecipesCard
           key={index}
           recipe={recipe}
-          isFavorite={favoriteRecipes.includes(recipe.id||'')} 
+          isFavorite={favoriteRecipes.includes(recipe._id||'')} 
         />
       )): <p>Loading...</p>}
     </div>

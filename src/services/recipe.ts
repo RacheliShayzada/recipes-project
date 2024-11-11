@@ -34,7 +34,7 @@ export const getRecipeByCategory = async (category: string): Promise<Recipe[]> =
 
 export const getRecipeByIds = async (ids: string[]): Promise<Recipe[]> => {
     try {
-        const response = await http.post(`/recipe/ids`, ids);
+        const response = await http.post(`/recipe/ids`, {"ids": ids});
         return response.data;
     } catch (error) {
         console.error(`Error fetching recipes with IDs ${ids}:`, error);

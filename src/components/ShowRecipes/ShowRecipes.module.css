@@ -8,7 +8,7 @@
   
   @media (min-width: 1000px) {
     .gridContainer {
-      grid-template-columns: repeat(5, 1fr); /* עד 5 כרטיסים בשורה */
+      grid-template-columns: repeat(4, 1fr); /* עד 5 כרטיסים בשורה */
     }
   }
   
