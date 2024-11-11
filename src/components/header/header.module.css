@@ -1,7 +1,16 @@
 .header {
+    /* display: flex;
+    flex-direction: column;
+    gap: 10px; */
+
     display: flex;
     flex-direction: column;
     gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
   }
   
   .header_top {
@@ -17,12 +26,17 @@
   }
   
   .add_recipe_button {
-    background-color: #6c63ff;
+    background-color: #6a0dad;
     color: white;
+    padding: 5px 10px;
     border: none;
-    padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 15px;
+  }
+
+  .add_recipe_button:hover {
+    background-color: #39046b;
   }
   
   .tabs {

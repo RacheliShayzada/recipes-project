@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './header.module.css';
 
 const Header = () => {
+    const router = useRouter();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTab, setSelectedTab] = useState('all');
     const [selectedCategorie, setSelectedCategorie] = useState('');
@@ -19,7 +21,6 @@ const Header = () => {
 
     const search = () => {
         console.log('Search clicked');
-        // Perform search logic here
     };
 
     const handleTabChange = (tab: string) => {
@@ -28,9 +29,7 @@ const Header = () => {
 
     };
 
-    const onAddRecipe = () => {
-        console.log("Add Recipe");
-    }
+    const onAddRecipe = () => {router.push('/add-recipe');}
 
     const onCategoryChange = (category:string) => {
         console.log('Selected category:', category);
