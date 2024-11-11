@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createRecipe } from "@/services/recipe";
@@ -11,7 +11,6 @@ const recipeSchema = z.object({
   recipe_name: z.string().min(1, "Name is required"),
   category: z.union([z.array(z.string()), z.string()]).transform((val) => (typeof val === "string" ? [val] : val)),
   imageUrl: z.string().url("Must be a valid URL"),
-  ingredients: z.array(z.string()).min(1, "At least one ingredient is required"),
   instructions: z.string().min(1, "Instructions are required"),
   shortDescription: z.string().optional(),
 });
@@ -19,13 +18,12 @@ const recipeSchema = z.object({
 type RecipeFormData = z.infer<typeof recipeSchema>;
 
 const AddRecipe: React.FC = () => {
-  const { register, handleSubmit, control, formState: { errors } } = useForm<RecipeFormData>({
+  const { register, handleSubmit, formState: { errors } } = useForm<RecipeFormData>({
     resolver: zodResolver(recipeSchema),
-    defaultValues: { ingredients: [""] },
   });
 
-  const { fields, append, remove } = useFieldArray({ control, name: "ingredients" });
-  const [categories, setCategories] = useState<string[]>([]); 
+  const [ingredients, setIngredients] = useState<string[]>([""]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -40,13 +38,32 @@ const AddRecipe: React.FC = () => {
     fetchCategories();
   }, []);
 
+  const handleIngredientChange = (index: number, value: string) => {
+    const updatedIngredients = [...ingredients];
+    updatedIngredients[index] = value;
+    setIngredients(updatedIngredients);
+  };
+
+  const addIngredient = () => {
+    setIngredients([...ingredients, ""]);
+  };
+
+  const removeIngredient = (index: number) => {
+    setIngredients(ingredients.filter((_, i) => i !== index));
+  };
+
   const onSubmit: SubmitHandler<RecipeFormData> = async (data) => {
+    if (ingredients.length === 0 || ingredients.some(ingredient => ingredient.trim() === "")) {
+      setMessage("At least one valid ingredient is required.");
+      return;
+    }
+
     try {
       await createRecipe({
         name: data.recipe_name,
         category: data.category,
         imageUrl: data.imageUrl,
-        ingredients: data.ingredients,
+        ingredients,
         instructions: data.instructions,
         shortDescription: data.shortDescription || "",
       });
@@ -79,14 +96,18 @@ const AddRecipe: React.FC = () => {
         <input className={styles.input} placeholder="Image URL" {...register("imageUrl")} />
         {errors.imageUrl && <p>{errors.imageUrl.message}</p>}
 
-        {fields.map((field, index) => (
-          <div key={field.id} className={styles.ingredientContainer}>
-            <input className={styles.input} placeholder="Ingredient" {...register(`ingredients.${index}` as const)} />
-            <button type="button" onClick={() => remove(index)}>Remove</button>
+        {ingredients.map((ingredient, index) => (
+          <div key={index} className={styles.ingredientContainer}>
+            <input
+              className={styles.input}
+              placeholder="Ingredient"
+              value={ingredient}
+              onChange={(e) => handleIngredientChange(index, e.target.value)}
+            />
+            <button type="button" onClick={() => removeIngredient(index)}>Remove</button>
           </div>
         ))}
-        <button type="button" className={styles.addIngredientButton} onClick={() => append("")}>+</button>
-        {errors.ingredients && <p>{errors.ingredients.message}</p>}
+        <button type="button" className={styles.addIngredientButton} onClick={addIngredient}>+</button>
 
         <textarea className={styles.textarea} placeholder="Instructions" {...register("instructions")}></textarea>
         {errors.instructions && <p>{errors.instructions.message}</p>}
