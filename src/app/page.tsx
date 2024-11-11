@@ -37,14 +37,14 @@ function Home() {
     if (selectedTab === 'favorites') {
       const favoriteRecipes: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
       const res = await getRecipeByIds(favoriteRecipes);
-      filtered = (res as unknown as { documents: Recipe[] }).documents; // קבלת המערך מתוך השדה documents
+      filtered = (res as unknown as { documents: Recipe[] }).documents;
       if (selectedCategorie) {
         filtered = filtered.filter((recipe) => recipe.category.includes(selectedCategorie));
       }
     } else {
       if (selectedCategorie) {
         const res = await getRecipeByCategory(selectedCategorie);
-        filtered = (res as unknown as { documents: Recipe[] }).documents; // קבלת המערך מתוך השדה documents גם עבור קטגוריות
+        filtered = (res as unknown as { documents: Recipe[] }).documents; 
       }
     }
 
@@ -84,7 +84,7 @@ function Home() {
         handleTabClick={handleTabClick}
         handleCategorieClick={handleCategorieClick}
         selectedTab={selectedTab}
-        selectedCategory={selectedCategorie} // העברת הקטגוריה הנבחרת כ-prop
+        selectedCategory={selectedCategorie} 
       />
       <ShowRecipes recipes={recipes} />
       <Popap/>
