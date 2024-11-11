@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getAllCategorys } from '@/services/category'
 import styles from './header.module.css';
+import Link from 'next/link';
 
 type HeaderProps = {
     handleCategorieClick: (category: string) => void;
@@ -13,20 +14,21 @@ type HeaderProps = {
 };
 
 const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTab, selectedCategory }: HeaderProps) => {
+    const router = useRouter();
     const [searchTerm, setSearchTerm] = useState('');
     const [categories, setCategories] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchCategories = async () => {
-          try {
-            const categoryData = await getAllCategorys();
-            setCategories(categoryData.map((categorie) => categorie.name));
-          } catch (error) {
-            console.error("Error fetching categories:", error);
-          }
+            try {
+                const categoryData = await getAllCategorys();
+                setCategories(categoryData.map((categorie) => categorie.name));
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
         };
         fetchCategories();
-      }, []);
+    }, []);
 
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,17 +50,17 @@ const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTa
                 <div className={styles.header_top}>
                     <h1 className={styles.header_text}><strong>Recipes</strong></h1>
                     <select
-                            onChange={(e) => onCategoryChange(e.target.value)}
-                            value={selectedCategory}
-                            className={styles.customSelect}
-                        >
-                            <option value="">Pick a Category</option>
-                            {categories.map((category) => (
-                                <option key={category} value={category}>
-                                    {category}
-                                </option>
-                            ))}
-                        </select>
+                        onChange={(e) => onCategoryChange(e.target.value)}
+                        value={selectedCategory}
+                        className={styles.customSelect}
+                    >
+                        <option value="">Pick a Category</option>
+                        {categories.map((category) => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
                     <div className={styles.search_filter}>
 
                         <input
@@ -72,6 +74,9 @@ const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTa
                             Search
                         </button>
                     </div>
+                    <Link onClick={onAddRecipe} className={styles.customButton} href='/add-recipe'>
+                        Add New
+                    </Link>
                 </div>
 
                 <div className={styles.tabs}>
