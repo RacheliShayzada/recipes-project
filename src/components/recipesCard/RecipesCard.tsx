@@ -32,7 +32,7 @@ function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
             onClick={handleFavoriteClick}
             style={{ cursor: 'pointer' }}
           >
-            {favorite ? '⭐' : '☆'}
+            {favorite ? '🌟':'⭐'}
           </span>
         </div>
         <p className={styles.category}>{recipe.category.join(', ')}</p>

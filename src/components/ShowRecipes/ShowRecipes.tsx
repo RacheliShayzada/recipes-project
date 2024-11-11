@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React from 'react';
 import RecipesCard from '@/components/recipesCard/RecipesCard';
@@ -14,13 +14,13 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
 
   return (
     <div className={styles.gridContainer}>
-      {recipes.map((recipe, index) => (
+      {recipes.length> 0 ? recipes.map((recipe, index) => (
         <RecipesCard
           key={index}
           recipe={recipe}
-          isFavorite={favoriteRecipes.includes(recipe.id || 'b3g3v3c3c2223232')} // i added || 'b3... because id can be null
+          isFavorite={favoriteRecipes.includes(recipe.id||'')} 
         />
-      ))}
+      )): <p>Loading...</p>}
     </div>
   );
 }

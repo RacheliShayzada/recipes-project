@@ -1,43 +1,56 @@
-// src/app/add-recipe/AddRecipe.tsx
 "use client";
 
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-// import { addRecipeToDB } from "../../service/respy";
+import { createRecipe } from "@/services/recipe";
 import styles from "./addRecipe.module.css";
 
+// הגדרת הסכמה עם Zod
 const recipeSchema = z.object({
   recipe_name: z.string().min(1, "Name is required"),
-  category: z.enum(["a", "b", "c"], {
-    required_error: "Category is required",
-    invalid_type_error: "Please select a valid category",
-  }),
+  category: z.string().nonempty("Category is required"),
   imageUrl: z.string().url("Must be a valid URL"),
   ingredients: z.array(z.string()).min(1, "At least one ingredient is required"),
   instructions: z.string().min(1, "Instructions are required"),
+  shortDescription: z.string().optional(),
 });
 
 type RecipeFormData = z.infer<typeof recipeSchema>;
 
 const AddRecipe: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<RecipeFormData>({
+  const { register, handleSubmit, control, formState: { errors } } = useForm<RecipeFormData>({
     resolver: zodResolver(recipeSchema),
+    defaultValues: {
+      ingredients: [""],
+    },
   });
-  const [ingredients, setIngredients] = useState<string[]>([""]);
 
-  const onSubmit = async (data: RecipeFormData) => {
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "ingredients" as const,
+  });
+  
+
+  const [message, setMessage] = useState<string | null>(null);
+
+  const onSubmit: SubmitHandler<RecipeFormData> = async (data) => {
     try {
-      // await addRecipeToDB(data);
-      console.log("Recipe saved to the database:", data);
+      console.log("Submit")
+      await createRecipe({
+        name: data.recipe_name,
+        category: [data.category],
+        imageUrl: data.imageUrl,
+        ingredients: data.ingredients,
+        instructions: data.instructions,
+        shortDescription: data.shortDescription || "",
+      });
+      setMessage("Recipe saved successfully!");
     } catch (error) {
       console.error("Failed to save recipe:", error);
+      setMessage("Failed to save recipe. Please try again.");
     }
-  };
-
-  const addIngredientField = () => {
-    setIngredients([...ingredients, ""]);
   };
 
   return (
@@ -46,6 +59,9 @@ const AddRecipe: React.FC = () => {
         &#8592; Back
       </div>
       <h2 className={styles.title}>Add Recipe</h2>
+
+      {message && <p className={styles.message}>{message}</p>} {/* הודעה על הצלחה או כשלון */}
+
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <input
           className={styles.input}
@@ -69,24 +85,22 @@ const AddRecipe: React.FC = () => {
         />
         {errors.imageUrl && <p>{errors.imageUrl.message}</p>}
 
-        {ingredients.map((ingredient, index) => (
-          <div key={index} className={styles.ingredientContainer}>
+        {fields.map((field, index) => (
+          <div key={field.id} className={styles.ingredientContainer}>
             <input
               className={styles.input}
               placeholder="Ingredient"
-              value={ingredient}
-              onChange={(e) => {
-                const newIngredients = [...ingredients];
-                newIngredients[index] = e.target.value;
-                setIngredients(newIngredients);
-              }}
+              {...register(`ingredients.${index}` as const)}
             />
+            <button type="button" onClick={() => remove(index)}>
+              Remove
+            </button>
           </div>
         ))}
         <button
           type="button"
           className={styles.addIngredientButton}
-          onClick={addIngredientField}
+          onClick={() => append("")}
         >
           +
         </button>
@@ -98,6 +112,12 @@ const AddRecipe: React.FC = () => {
           {...register("instructions")}
         ></textarea>
         {errors.instructions && <p>{errors.instructions.message}</p>}
+
+        <input
+          className={styles.input}
+          placeholder="Short Description"
+          {...register("shortDescription")}
+        />
 
         <button type="submit" className={styles.addButton}>Add</button>
       </form>
