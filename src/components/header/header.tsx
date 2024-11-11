@@ -3,17 +3,24 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './header.module.css';
 
+
 const Header = () => {
     const router = useRouter();
+
+type HeaderProps = {
+    handleCategorieClick: any,
+    handleTabClick: any,
+    handleSearch: any,
+    selectedTab:string
+}
+
+const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTab }: HeaderProps) => {
+
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedTab, setSelectedTab] = useState('all');
-    const [selectedCategorie, setSelectedCategorie] = useState('');
-
-
 
     const categories = ['Desserts', 'Main Course', 'Salads'];
 
-    const handleSearch = (e: any) => {
+    const handleSearchChange = (e: any) => {
         console.log('Searching for:', searchTerm);
         const value = e.target.value;
         setSearchTerm(value);
@@ -21,19 +28,20 @@ const Header = () => {
 
     const search = () => {
         console.log('Search clicked');
+        handleSearch(searchTerm);
+
     };
 
     const handleTabChange = (tab: string) => {
         console.log(tab);
-        setSelectedTab(tab);
-
+        handleTabClick(tab);
     };
 
     const onAddRecipe = () => {router.push('/add-recipe');}
 
-    const onCategoryChange = (category:string) => {
+    const onCategoryChange = (category: string) => {
         console.log('Selected category:', category);
-        setSelectedCategorie(category);
+        handleCategorieClick(category);
     };
 
     return (
@@ -56,7 +64,7 @@ const Header = () => {
                             type="text"
                             placeholder="Search"
                             value={searchTerm}
-                            onChange={handleSearch}
+                            onChange={handleSearchChange}
                         />
                         <button onClick={search} className={styles.add_recipe_button}>
                             search
