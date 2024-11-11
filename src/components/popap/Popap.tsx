@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { Recipe } from '@/types/types'
+import { useDisplayStore } from '@/services/providers/DisplayRecipeProvider'
 
 export const localRecipe: Recipe = {
     id: '1',
@@ -13,16 +14,17 @@ export const localRecipe: Recipe = {
 };
 
 export default function Popap(){
+    const { isModalOpen, selectedRecipe, closeModal } = useDisplayStore((state) => state,)
 
-    
-function close(){
-    console.log('Closing');
-}
 
     return(
+        <>
+        { isModalOpen && (selectedRecipe !== null) 
+        ? 
+        (
         <div className={`w-screen h-screen bg-gray-700 bg-opacity-80`}>
             <div id='div2' className='absolute top-0 right-0 w-1/3 h-full bg-white rounded-lg p-4'>
-                <button onClick={close} className=''>X</button>
+                <button onClick={()=> void closeModal()} className=''>X</button>
                 <div className='flex flex-row h-1/3'>
                     <img src={localRecipe.imageUrl} alt={localRecipe.name} width={200} height={200} className='rounded-lg'/>
                     <div>
@@ -38,5 +40,12 @@ function close(){
                 </div>
             </div>            
         </div>
+        ) 
+        : 
+        (<p></p>)
+        }
+        </>
+
+        
     )
 }

@@ -10,7 +10,6 @@ export type ShowRecipesProps = {
 };
 
 function ShowRecipes({ recipes }: ShowRecipesProps) {
-  // קריאה ל-localStorage והמרת המידע מערך של IDs
   const favoriteRecipes: string[] = JSON.parse(localStorage.getItem('favorites') || '[]'); 
 
   return (
@@ -19,7 +18,7 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
         <RecipesCard
           key={index}
           recipe={recipe}
-          isFavorite={favoriteRecipes.includes(recipe.id)}  // בדיקה אם המתכון נמצא ברשימת המועדפים
+          isFavorite={favoriteRecipes.includes(recipe.id || 'b3g3v3c3c2223232')} // i added || 'b3... because id can be null
         />
       ))}
     </div>
