@@ -4,7 +4,7 @@ import { Recipe } from '@/types/types'
 import { useDisplayStore } from '@/services/providers/DisplayRecipeProvider'
 
 export const localRecipe: Recipe = {
-    id: '1',
+    _id: '1',
     name: 'Pasta Bolognese',
     imageUrl: 'https://images.kosher.com/uploads/Pinson-Mushka-One-Pot-Spaghetti-and-Meat-Sauce.webp',
     category: ['Italian', 'Meat', 'Pasta'],
