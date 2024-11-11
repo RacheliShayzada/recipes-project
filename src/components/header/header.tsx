@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './header.module.css';
 
 type HeaderProps = {
@@ -10,6 +11,7 @@ type HeaderProps = {
 }
 
 const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTab }: HeaderProps) => {
+    const router = useRouter();
     const [searchTerm, setSearchTerm] = useState('');
 
     const categories = ['Desserts', 'Main Course', 'Salads'];
@@ -32,6 +34,7 @@ const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTa
 
     const onAddRecipe = () => {
         console.log("Add Recipe");
+        router.push('/add-recipe');
     }
 
     const onCategoryChange = (category: string) => {
