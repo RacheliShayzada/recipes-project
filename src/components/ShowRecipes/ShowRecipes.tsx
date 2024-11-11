@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import RecipesCard from '@/components/recipesCard/RecipesCard';
 import { Recipe } from '@/types/types';
 import styles from './ShowRecipes.module.css';
@@ -10,8 +10,13 @@ export type ShowRecipesProps = {
 };
 
 function ShowRecipes({ recipes }: ShowRecipesProps) {
-  const favoriteRecipes: string[] = JSON.parse(localStorage.getItem('favorites') || '[]'); 
+  const [favoriteRecipes, setFavoriteRecipes] = useState<string[]>([]);
 
+  useEffect(() => {
+    const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+    setFavoriteRecipes(storedFavorites);
+  }, []); 
+  
   return (
     <div className={styles.gridContainer}>
       {recipes.length> 0 ? recipes.map((recipe, index) => (
