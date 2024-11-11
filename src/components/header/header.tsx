@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { getAllCategorys } from '@/services/category'
 import styles from './header.module.css';
 
 type HeaderProps = {
@@ -12,25 +14,33 @@ type HeaderProps = {
 
 const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTab, selectedCategory }: HeaderProps) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [categories, setCategories] = useState<string[]>([]);
 
-    const categories = ['Desserts', 'Main Course', 'Salads'];
+    useEffect(() => {
+        const fetchCategories = async () => {
+          try {
+            const categoryData = await getAllCategorys();
+            setCategories(categoryData.map((categorie) => categorie.name));
+          } catch (error) {
+            console.error("Error fetching categories:", error);
+          }
+        };
+        fetchCategories();
+      }, []);
+
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearchTerm(value);
     };
 
-    const search = () => {
-        handleSearch(searchTerm);
-    };
+    const search = () => { handleSearch(searchTerm); };
 
-    const handleTabChange = (tab: string) => {
-        handleTabClick(tab);
-    };
+    const handleTabChange = (tab: string) => { handleTabClick(tab); };
 
-    const onCategoryChange = (category: string) => {
-        handleCategorieClick(category);
-    };
+    const onAddRecipe = () => { router.push('/add-recipe'); }
+
+    const onCategoryChange = (category: string) => { handleCategorieClick(category); };
 
     return (
         <>
