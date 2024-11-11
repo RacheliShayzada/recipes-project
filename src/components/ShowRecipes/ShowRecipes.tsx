@@ -4,6 +4,7 @@ import React from 'react';
 import RecipesCard from '@/components/recipesCard/RecipesCard';
 import { Recipe } from '@/types/types';
 import styles from './ShowRecipes.module.css';
+import Loading from '../loading/Loading';
 
 export type ShowRecipesProps = {
   recipes: Recipe[];
@@ -20,7 +21,7 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
           recipe={recipe}
           isFavorite={favoriteRecipes.includes(recipe._id||'')} 
         />
-      )): <p>Loading...</p>}
+      )): <p>nothing to see in hear</p>}
     </div>
   );
 }
