@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Recipe } from '@/types/types';
 import styles from './RecipesCard.module.css';
+import { useDisplayStore } from '@/services/providers/DisplayRecipeProvider'
 
 export type RecipesCardProps = {
   recipe: Recipe;
@@ -45,7 +46,7 @@ function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
         </div>
         <p className={styles.category}>{recipe.category.join(', ')}</p>
         <p className={styles.description}>{recipe.shortDescription}</p>
-        <button className={styles.readMore}>Read more</button>
+        <button className={styles.readMore} onClick={()=> void openModal(recipe)}>Read more</button>
       </div>
     </div>
   );
