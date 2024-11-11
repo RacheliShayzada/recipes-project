@@ -2,7 +2,7 @@ import http from "./http";
 import { Category } from "@/types/types";
 
 
-export const getAllCategory = async (): Promise<Category[]> => {
+export const getAllCategorys = async (): Promise<Category[]> => {
     try {
         const response = await http.get("/category");
         return  response.data.documents;
