@@ -13,6 +13,7 @@ export type RecipesCardProps = {
 function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
   const [favorite, setFavorite] = useState(isFavorite);
   const { openModal } = useDisplayStore((state) => state,)
+  
   const handleFavoriteClick = () => {
     setFavorite(!favorite);
   };

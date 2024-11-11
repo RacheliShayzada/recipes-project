@@ -22,7 +22,7 @@ export default function Popap(){
         { isModalOpen && (selectedRecipe !== null) 
         ? 
         (
-        <div className={`w-screen h-screen bg-gray-700 bg-opacity-80`}>
+        <div className={`w-screen h-screen fixed inset-0 z-50 bg-gray-700 bg-opacity-60`}>
             <div id='div2' className='absolute top-0 right-0 w-1/3 h-full bg-white rounded-lg p-4'>
                 <button onClick={()=> void closeModal()} className=''>X</button>
                 <div className='flex flex-row h-1/3'>

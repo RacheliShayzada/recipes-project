@@ -1,6 +1,7 @@
 "use client";
 
 import Header from '@/components/header/header';
+import Popap from '@/components/popap/Popap';
 import ShowRecipes from '@/components/ShowRecipes/ShowRecipes';
 import { getAllRecipes, getRecipeByCategory, getRecipeByIds } from '@/services/recipe';
 import { Recipe } from '@/types/types';
@@ -78,6 +79,7 @@ function Home() {
         selectedTab={selectedTab}
       />
       <ShowRecipes recipes={recipes} />
+      <Popap/>
     </div>
   );
 }
