@@ -12,6 +12,7 @@ export type RecipesCardProps = {
 
 function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
   const [favorite, setFavorite] = useState(isFavorite);
+  const { openModal } = useDisplayStore((state) => state,);
 
   const toggleFavoriteInLocalStorage = () => {
     const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
