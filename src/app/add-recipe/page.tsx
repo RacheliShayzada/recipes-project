@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createRecipe } from "@/services/recipe";
 import styles from "./addRecipe.module.css";
 
+// הגדרת הסכמה עם Zod
 const recipeSchema = z.object({
   recipe_name: z.string().min(1, "Name is required"),
   category: z.string().nonempty("Category is required"),
@@ -19,40 +20,36 @@ const recipeSchema = z.object({
 type RecipeFormData = z.infer<typeof recipeSchema>;
 
 const AddRecipe: React.FC = () => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<RecipeFormData>({
+  const { register, handleSubmit, control, formState: { errors } } = useForm<RecipeFormData>({
     resolver: zodResolver(recipeSchema),
+    defaultValues: {
+      ingredients: [""],
+    },
   });
-  const [ingredients, setIngredients] = useState<string[]>([""]);
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "ingredients" as const,
+  });
+  
+
   const [message, setMessage] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);  // Track loading state
 
-  const onSubmit = async (data: RecipeFormData) => {
-    console.log("Form Data Submitted:", data); // Debugging: log the form data
-    setLoading(true); // Set loading to true when submitting
-
+  const onSubmit: SubmitHandler<RecipeFormData> = async (data) => {
     try {
-      const response = await createRecipe({
+      await createRecipe({
         name: data.recipe_name,
+        category: [data.category],
         imageUrl: data.imageUrl,
-        category: [data.category], 
         ingredients: data.ingredients,
         instructions: data.instructions,
-        shortDescription: data.shortDescription || "", 
+        shortDescription: data.shortDescription || "",
       });
-
-      console.log("Response from API:", response); // Debugging: check the API response
       setMessage("Recipe saved successfully!");
-      reset();  // Reset the form if the submission was successful
     } catch (error) {
-      console.error("Failed to save recipe:", error); // Debugging: log any error
+      console.error("Failed to save recipe:", error);
       setMessage("Failed to save recipe. Please try again.");
-    } finally {
-      setLoading(false); // Set loading to false after API call
     }
-  };
-
-  const addIngredientField = () => {
-    setIngredients([...ingredients, ""]);
   };
 
   return (
@@ -61,10 +58,8 @@ const AddRecipe: React.FC = () => {
         &#8592; Back
       </div>
       <h2 className={styles.title}>Add Recipe</h2>
-      
-      {message && <p className={styles.message}>{message}</p>} {/* Display success or error message */}
 
-      {loading && <p>Loading...</p>} {/* Show loading message */}
+      {message && <p className={styles.message}>{message}</p>} {/* הודעה על הצלחה או כשלון */}
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <input
@@ -89,24 +84,22 @@ const AddRecipe: React.FC = () => {
         />
         {errors.imageUrl && <p>{errors.imageUrl.message}</p>}
 
-        {ingredients.map((ingredient, index) => (
-          <div key={index} className={styles.ingredientContainer}>
+        {fields.map((field, index) => (
+          <div key={field.id} className={styles.ingredientContainer}>
             <input
               className={styles.input}
               placeholder="Ingredient"
-              value={ingredient}
-              onChange={(e) => {
-                const newIngredients = [...ingredients];
-                newIngredients[index] = e.target.value;
-                setIngredients(newIngredients);
-              }}
+              {...register(`ingredients.${index}` as const)}
             />
+            <button type="button" onClick={() => remove(index)}>
+              Remove
+            </button>
           </div>
         ))}
         <button
           type="button"
           className={styles.addIngredientButton}
-          onClick={addIngredientField}
+          onClick={() => append("")}
         >
           +
         </button>
@@ -125,9 +118,7 @@ const AddRecipe: React.FC = () => {
           {...register("shortDescription")}
         />
 
-        <button type="submit" className={styles.addButton} disabled={loading}>
-          Add
-        </button>
+        <button type="submit" className={styles.addButton}>Add</button>
       </form>
     </div>
   );
