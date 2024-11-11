@@ -37,6 +37,7 @@ const AddRecipe: React.FC = () => {
 
   const onSubmit: SubmitHandler<RecipeFormData> = async (data) => {
     try {
+      console.log("Submit")
       await createRecipe({
         name: data.recipe_name,
         category: [data.category],
