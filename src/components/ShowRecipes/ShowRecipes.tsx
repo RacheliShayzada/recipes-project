@@ -8,18 +8,17 @@ export type ShowRecipesProps = {
 };
 
 function ShowRecipes({ recipes }: ShowRecipesProps) {
-  // קריאה ל-localStorage והמרת המידע מערך של IDs
   const favoriteRecipes: string[] = JSON.parse(localStorage.getItem('favorites') || '[]'); 
 
   return (
     <div className={styles.gridContainer}>
-      {recipes.map((recipe, index) => (
+      {recipes.length> 0 ? recipes.map((recipe, index) => (
         <RecipesCard
           key={index}
           recipe={recipe}
-          isFavorite={favoriteRecipes.includes(recipe.id)}  // בדיקה אם המתכון נמצא ברשימת המועדפים
+          isFavorite={favoriteRecipes.includes(recipe.id||'')} 
         />
-      ))}
+      )): <p>Loading...</p>}
     </div>
   );
 }
