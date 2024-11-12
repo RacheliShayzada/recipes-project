@@ -4,28 +4,14 @@ import React, { useState } from 'react';
 import { Recipe } from '@/types/types';
 import styles from './RecipesCard.module.css';
 import { useDisplayStore } from '@/services/providers/DisplayRecipeProvider'
+import Favorite from '../favorite/Favorite';
 
 export type RecipesCardProps = {
   recipe: Recipe;
-  isFavorite: boolean;
 };
 
-function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
-  const [favorite, setFavorite] = useState(isFavorite);
+function RecipesCard({ recipe }: RecipesCardProps) {
   const { openModal } = useDisplayStore((state) => state,);
-
-  const toggleFavoriteInLocalStorage = () => {
-    const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const updatedFavorites = favorite
-      ? favorites.filter(id => id !== recipe._id) 
-      : [...favorites, recipe._id]; 
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-    setFavorite(!favorite); 
-  };
-
-  const handleFavoriteClick = () => {
-    toggleFavoriteInLocalStorage();
-  };
 
   return (
     <div className={styles.container}>
@@ -37,13 +23,7 @@ function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
       <div className={styles.content}>
         <div className={styles.headerContent}>
           <h2 className={styles.name}>{recipe.name}</h2>
-          <span 
-            className={styles.favoriteStar} 
-            onClick={handleFavoriteClick}
-            style={{ cursor: 'pointer' }}
-          >
-            {favorite ? '🌟' : '⭐'}
-          </span>
+          <Favorite recipeId={recipe._id} />
         </div>
         <p className={styles.category}>{recipe.category.join(', ')}</p>
         <p className={styles.description}>{recipe.shortDescription}</p>
