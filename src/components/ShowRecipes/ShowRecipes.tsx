@@ -11,12 +11,6 @@ export type ShowRecipesProps = {
 };
 
 function ShowRecipes({ recipes }: ShowRecipesProps) {
-  const [favoriteRecipes, setFavoriteRecipes] = useState<string[]>([]);
-
-  useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    setFavoriteRecipes(storedFavorites);
-  }, []); 
   
   return (
     <div className={styles.gridContainer}>
@@ -24,7 +18,6 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
         <RecipesCard
           key={index}
           recipe={recipe}
-          isFavorite={favoriteRecipes.includes(recipe._id||'')} 
         />
       )): <p>nothing to see in here</p>}
     </div>

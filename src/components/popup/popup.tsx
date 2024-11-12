@@ -3,28 +3,11 @@
 import React, { useState } from 'react';
 import { useDisplayStore } from '@/services/providers/DisplayRecipeProvider'
 import styles from '../popup/Popup.module.css';
+import Favorite from '../favorite/Favorite';
 
 export default function PopUp(){
     const { isModalOpen, selectedRecipe, closeModal } = useDisplayStore((state) => state,)
     const [favorite, setFavorite] = useState<boolean>(false);
-
-    
-  const toggleFavoriteInLocalStorage = () => {
-    const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
-    
-    if (selectedRecipe !== null) {
-      const updatedFavorites = favorite
-      ? favorites.filter(id => id !== selectedRecipe._id) 
-      : [...favorites, selectedRecipe._id]; 
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-    setFavorite(!favorite); 
-    }
-    
-  };
-
-  const handleFavoriteClick = () => {
-    toggleFavoriteInLocalStorage();
-  };
 
     return(
         <>
@@ -36,12 +19,7 @@ export default function PopUp(){
                 <div className='flex flex-row items-center justify-between'>
                   <button onClick={()=> void closeModal()} className=''>X</button>
                   <h1 className='text-2xl m-4'>{selectedRecipe.name}</h1>
-                  <span 
-                    className={styles.favoriteStar} 
-                    onClick={handleFavoriteClick}
-                    style={{ cursor: 'pointer' }}>
-                    {favorite ? '🌟' : '⭐'}
-                  </span>
+                  <Favorite recipeId={selectedRecipe._id} />
                 </div>
 
                 <div className='flex justify-between items-start space-x-8'>

@@ -1,15 +1,18 @@
 /* MealCard.module.css */
 
 .container {
-    width: 250px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    position: relative;
-    background-color: #fff;
-    margin-bottom: 25px;
-  }
+  width: 100%;
+  min-width: 250px; 
+  max-width: 250px; 
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  position: relative;
+  background-color: #fff;
+  margin-bottom: 25px;
+}
+
 
   .container:hover{
     background-color: #f1f1f1;
@@ -59,13 +62,6 @@
   
   .readMore:hover {
     background-color: #5c09a8;
-  }
-  
-  .favoriteStar {
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    color: #f4c542;
   }
 
   .headerContent{
