@@ -25,7 +25,11 @@ function RecipesCard({ recipe }: RecipesCardProps) {
           <h2 className={styles.name}>{recipe.name}</h2>
           <Favorite recipeId={recipe._id} />
         </div>
-        <p className={styles.category}>{recipe.category.join(', ')}</p>
+        <p className={styles.category}>
+          {Array.isArray(recipe.category) 
+            ? recipe.category.join(', ') 
+            : recipe.category}
+        </p>	        
         <p className={styles.description}>{recipe.shortDescription}</p>
         <button className={styles.readMore} onClick={()=> void openModal(recipe)}>Read more</button>
       </div>
