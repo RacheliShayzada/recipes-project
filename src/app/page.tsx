@@ -5,6 +5,7 @@ import ShowRecipes from '@/components/ShowRecipes/ShowRecipes';
 import { getAllRecipes, getRecipeByCategory, getRecipeByIds } from '@/services/recipe';
 import { Recipe } from '@/types/types';
 import React, { useEffect, useState } from 'react';
+import { fileURLToPath } from 'url';
 
 function Home() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -32,31 +33,18 @@ function Home() {
   }, []);
 
   const filteredRecipes = async () => {
-    let filtered: Recipe[] = [];
+    let filtered = await fetchData();
 
     if (selectedTab === 'favorites') {
       const favoriteRecipes: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
-      const res = await getRecipeByIds(favoriteRecipes);
-      filtered = (res as unknown as { documents: Recipe[] }).documents;
-      if (selectedCategorie) {
-        filtered = filtered.filter((recipe) => recipe.category.includes(selectedCategorie));
-      }
-    } else {
-      if (selectedCategorie) {
-        const res = await getRecipeByCategory(selectedCategorie);
-        filtered = (res as unknown as { documents: Recipe[] }).documents; 
-      }
+      filtered = (await filtered).filter(recipe => favoriteRecipes.includes(recipe._id||''));
     }
-
-    if (selectedTab !== 'favorites' && !selectedCategorie) {
-      const res = await fetchData();
-      filtered = res;
+    if (selectedCategorie) {
+      filtered = filtered.filter(recipe => recipe.category.includes(selectedCategorie));
     }
-
     if (searchTerm) {
       filtered = filtered.filter((recipe) => recipe.name.toLowerCase().includes(searchTerm.toLowerCase()));
     }
-
     setRecipes(filtered);
   };
 

@@ -3,14 +3,34 @@ import { Recipe } from "@/types/types";
 
 
 export const getAllRecipes = async (): Promise<Recipe[]> => {
+    const CACHE_KEY_DATA = "recipes";
+    const CACHE_KEY_TIMESTAMP = "recipesTimestamp";
+    const CACHE_EXPIRATION = 5 * 60 * 1000; // 5 דקות במילישניות
+
     try {
+        const cachedData = localStorage.getItem(CACHE_KEY_DATA);
+        const cachedTimestamp = localStorage.getItem(CACHE_KEY_TIMESTAMP);
+
+        if (cachedData && cachedTimestamp) {
+            const timestamp = parseInt(cachedTimestamp, 10);
+
+            if (Date.now() - timestamp < CACHE_EXPIRATION) {
+                console.log("משתמשים במידע מהזיכרון");
+                return JSON.parse(cachedData);
+            }
+        }
         const response = await http.get("/recipe");
-        return response.data;
+        const recipes = response.data;
+        localStorage.setItem(CACHE_KEY_DATA, JSON.stringify(recipes));
+        localStorage.setItem(CACHE_KEY_TIMESTAMP, Date.now().toString());
+
+        return recipes;
     } catch (error) {
-        console.error("Error fetching recipes:", error);
+        console.error("שגיאה בשליפת המתכונים:", error);
         throw error;
     }
 };
+
 
 export const getRecipeById = async (id: string): Promise<Recipe> => {
     try {
