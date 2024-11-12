@@ -26,7 +26,7 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
           recipe={recipe}
           isFavorite={favoriteRecipes.includes(recipe._id||'')} 
         />
-      )): <p>nothing to see in hear</p>}
+      )): <p>nothing to see in here</p>}
     </div>
   );
 }
