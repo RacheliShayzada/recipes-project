@@ -53,20 +53,27 @@ const AddRecipe: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<RecipeFormData> = async (data) => {
-    if (ingredients.length === 0 || ingredients.some(ingredient => ingredient.trim() === "")) {
+    if (ingredients.length === 0 || ingredients.some((ingredient) => ingredient.trim() === "")) {
       setMessage("At least one valid ingredient is required.");
       return;
     }
 
+    const newRecipe = {
+      name: data.recipe_name,
+      category: data.category,
+      imageUrl: data.imageUrl,
+      ingredients,
+      instructions: data.instructions,
+      shortDescription: data.shortDescription || "",
+    };
+
     try {
-      await createRecipe({
-        name: data.recipe_name,
-        category: data.category,
-        imageUrl: data.imageUrl,
-        ingredients,
-        instructions: data.instructions,
-        shortDescription: data.shortDescription || "",
-      });
+      await createRecipe(newRecipe);
+      const storedRecipes = JSON.parse(localStorage.getItem("recipes") || "null");
+      if (storedRecipes) {
+        storedRecipes.push(newRecipe);
+        localStorage.setItem("recipes", JSON.stringify(storedRecipes));
+      }
       setMessage("Recipe saved successfully!");
     } catch (error) {
       setMessage("Failed to save recipe. Please try again.");
