@@ -51,3 +51,13 @@ export const createRecipe = async (recipe: Recipe): Promise<Recipe> => {
         throw error;
     }
 };
+
+export const createRecipes = async (recipe: Recipe[]): Promise<Recipe[]> => {
+    try {
+        const response = await http.post("/recipe", recipe);
+        return response.data;
+    } catch (error) {
+        console.error("Error creating recipe:", error);
+        throw error;
+    }
+};

@@ -26,17 +26,17 @@ export default function Popap(){
             <div id='div2' className='absolute top-0 right-0 w-1/3 h-full bg-white rounded-lg p-4'>
                 <button onClick={()=> void closeModal()} className=''>X</button>
                 <div className='flex flex-row h-1/3'>
-                    <img src={localRecipe.imageUrl} alt={localRecipe.name} width={200} height={200} className='rounded-lg'/>
+                    <img src={selectedRecipe.imageUrl} alt={selectedRecipe.name} width={200} height={200} className='rounded-lg'/>
                     <div>
-                        <h1>{localRecipe.name}</h1>
-                        <p>{localRecipe.category}</p>
+                        <h1>{selectedRecipe.name}</h1>
+                        <p>{selectedRecipe.category}</p>
                         <p>star</p>
-                        <p>{localRecipe.ingredients}</p>
+                        <p>{selectedRecipe.ingredients}</p>
                     </div>
                     
                 </div> 
                 <div>
-                     <p>{localRecipe.instructions}</p>
+                     <p>{selectedRecipe.instructions}</p>
                 </div>
             </div>            
         </div>
