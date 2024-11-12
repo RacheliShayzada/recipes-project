@@ -71,7 +71,7 @@ const AddRecipe: React.FC = () => {
       await createRecipe(newRecipe);
       const storedRecipes = JSON.parse(localStorage.getItem("recipes") || "null");
       if (storedRecipes) {
-        storedRecipes.push(newRecipe);
+        storedRecipes.documents.push(newRecipe);
         localStorage.setItem("recipes", JSON.stringify(storedRecipes));
       }
       setMessage("Recipe saved successfully!");
