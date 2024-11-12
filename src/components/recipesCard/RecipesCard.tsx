@@ -14,6 +14,8 @@ function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
   const [favorite, setFavorite] = useState(isFavorite);
   const { openModal } = useDisplayStore((state) => state,);
 
+  console.log(recipe.category);
+
   const toggleFavoriteInLocalStorage = () => {
     const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
     const updatedFavorites = favorite
@@ -44,8 +46,12 @@ function RecipesCard({ recipe, isFavorite }: RecipesCardProps) {
           >
             {favorite ? '🌟' : '⭐'}
           </span>
-        </div>
-        <p className={styles.category}>{recipe.category.join(', ')}</p>
+         </div>
+        <p className={styles.category}>
+          {Array.isArray(recipe.category) 
+            ? recipe.category.join(', ') 
+            : recipe.category}
+        </p>
         <p className={styles.description}>{recipe.shortDescription}</p>
         <button className={styles.readMore} onClick={()=> void openModal(recipe)}>Read more</button>
       </div>
