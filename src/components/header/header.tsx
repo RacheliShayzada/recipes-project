@@ -54,7 +54,7 @@ const Header = ({ handleCategorieClick, handleTabClick, handleSearch, selectedTa
                         value={selectedCategory}
                         className={styles.customSelect}
                     >
-                        <option value="">Pick a Category</option>
+                        <option value="">All the recipes</option>
                         {categories.map((category) => (
                             <option key={category} value={category}>
                                 {category}
