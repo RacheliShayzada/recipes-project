@@ -7,10 +7,11 @@ import styles from './ShowRecipes.module.css';
 import Loading from '../loading/Loading';
 
 export type ShowRecipesProps = {
-  recipes: Recipe[];
+  recipes: Recipe[],
+  onDelete: any,
 };
 
-function ShowRecipes({ recipes }: ShowRecipesProps) {
+function ShowRecipes({ recipes, onDelete }: ShowRecipesProps) {
   const [favoriteRecipes, setFavoriteRecipes] = useState<string[]>([]);
 
   useEffect(() => {
@@ -25,6 +26,7 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
           key={index}
           recipe={recipe}
           isFavorite={favoriteRecipes.includes(recipe._id||'')} 
+          onDelete={onDelete}
         />
       )): <p>nothing to see in here</p>}
     </div>
