@@ -62,8 +62,10 @@ export const getRecipeByIds = async (ids: string[]): Promise<Recipe[]> => {
     }
 };
 
-export const createRecipe = async (recipe: Recipe): Promise<Recipe> => {
+
+export const createRecipe = async (recipe: Omit<Recipe, '_id'>): Promise<Recipe> => {//+
     try {
+        console.log('Creating', recipe);
         const response = await http.post("/recipe", recipe);
         return response.data;
     } catch (error) {
