@@ -11,13 +11,7 @@ export type ShowRecipesProps = {
   onDelete: any,
 };
 
-function ShowRecipes({ recipes, onDelete }: ShowRecipesProps) {
-  const [favoriteRecipes, setFavoriteRecipes] = useState<string[]>([]);
-
-  useEffect(() => {
-    const storedFavorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    setFavoriteRecipes(storedFavorites);
-  }, []); 
+function ShowRecipes({ recipes }: ShowRecipesProps) {
   
   return (
     <div className={styles.gridContainer}>
@@ -25,6 +19,7 @@ function ShowRecipes({ recipes, onDelete }: ShowRecipesProps) {
         <RecipesCard
           key={index}
           recipe={recipe}
+
           isFavorite={favoriteRecipes.includes(recipe._id||'')} 
           onDelete={onDelete}
         />

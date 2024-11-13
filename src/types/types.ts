@@ -6,12 +6,11 @@ export type Recipe = {
     ingredients: string[];  
     instructions: string;    
     shortDescription: string; 
-  };
+};
 
-
-  export type Category={
+export type Category={
     id: string;   
     name: string; 
-  }
+}
 
        
