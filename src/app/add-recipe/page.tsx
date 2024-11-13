@@ -61,7 +61,6 @@ const AddRecipe: React.FC = () => {
     }
 
     const newRecipe = {
-      _id:"",
       name: data.recipe_name,
       category: [data.category],
       imageUrl: data.imageUrl,
@@ -71,10 +70,12 @@ const AddRecipe: React.FC = () => {
     };
 
     try {
-      await createRecipe(newRecipe);
+      const r:any = await createRecipe(newRecipe);
+   
+      let idd =r.result.insertedId
       const storedRecipes = JSON.parse(localStorage.getItem("recipes") || "null");
       if (storedRecipes) {
-        storedRecipes.documents.push(newRecipe);
+        storedRecipes.documents.push({"_id":idd,...newRecipe});
         localStorage.setItem("recipes", JSON.stringify(storedRecipes));
       }
       setMessage("Recipe saved successfully!");
