@@ -34,7 +34,6 @@ function RecipesCard({ recipe, onDelete }: RecipesCardProps) {
       console.log("Failed to delete recipe. Please try again.");
     }
   };
-};
 
   return (
     <div className={styles.container}>
