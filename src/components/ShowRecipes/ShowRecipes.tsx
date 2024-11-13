@@ -11,7 +11,7 @@ export type ShowRecipesProps = {
   onDelete: any,
 };
 
-function ShowRecipes({ recipes }: ShowRecipesProps) {
+function ShowRecipes({ recipes, onDelete }: ShowRecipesProps) {
   
   return (
     <div className={styles.gridContainer}>
@@ -19,8 +19,6 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
         <RecipesCard
           key={index}
           recipe={recipe}
-
-          isFavorite={favoriteRecipes.includes(recipe._id||'')} 
           onDelete={onDelete}
         />
       )): <p>nothing to see in here</p>}
