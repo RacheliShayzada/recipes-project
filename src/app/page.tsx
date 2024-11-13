@@ -1,11 +1,10 @@
 "use client";
 import Header from '@/components/header/header';
-import Popap from '@/components/popap/Popap';
+import PopUp from '@/components/popup/popup';
 import ShowRecipes from '@/components/ShowRecipes/ShowRecipes';
-import { getAllRecipes, getRecipeByCategory, getRecipeByIds } from '@/services/recipe';
+import { getAllRecipes } from '@/services/recipe';
 import { Recipe } from '@/types/types';
 import React, { useEffect, useState } from 'react';
-import { fileURLToPath } from 'url';
 
 function Home() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -65,6 +64,10 @@ function Home() {
     setSelectedCategorie(categorie);
   };
 
+  const handlerDelete = async()=>{
+      setRecipes(await fetchData());
+  }
+
   return (
     <div>
       <Header
@@ -74,8 +77,9 @@ function Home() {
         selectedTab={selectedTab}
         selectedCategory={selectedCategorie} 
       />
-      <ShowRecipes recipes={recipes} />
-      <Popap/>
+
+      <ShowRecipes recipes={recipes} onDelete={handlerDelete}/>
+      <PopUp/>
     </div>
   );
 }

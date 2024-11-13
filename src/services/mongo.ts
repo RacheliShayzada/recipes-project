@@ -25,6 +25,11 @@ export async function insertDocument(client: any, collection: string, document: 
    return result;
 }
 
+export async function deleteDocument(client: any, collection: string, id: ObjectId) {
+    const db = client.db('mini_project');
+    const result = await db.collection(collection).deleteOne({ _id: new ObjectId(id) }); 
+    return result; 
+}
 
 export async function getAllDocuments(client: any, collection: string) {
    const db = client.db('mini_project');

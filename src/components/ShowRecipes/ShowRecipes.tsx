@@ -7,10 +7,11 @@ import styles from './ShowRecipes.module.css';
 import Loading from '../loading/Loading';
 
 export type ShowRecipesProps = {
-  recipes: Recipe[];
+  recipes: Recipe[],
+  onDelete: any,
 };
 
-function ShowRecipes({ recipes }: ShowRecipesProps) {
+function ShowRecipes({ recipes, onDelete }: ShowRecipesProps) {
   
   return (
     <div className={styles.gridContainer}>
@@ -18,6 +19,7 @@ function ShowRecipes({ recipes }: ShowRecipesProps) {
         <RecipesCard
           key={index}
           recipe={recipe}
+          onDelete={onDelete}
         />
       )): <p>nothing to see in here</p>}
     </div>

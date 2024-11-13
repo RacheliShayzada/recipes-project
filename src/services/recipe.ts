@@ -62,12 +62,24 @@ export const getRecipeByIds = async (ids: string[]): Promise<Recipe[]> => {
     }
 };
 
-export const createRecipe = async (recipe: Recipe): Promise<Recipe> => {
+
+export const createRecipe = async (recipe: Omit<Recipe, '_id'>): Promise<Recipe> => {//+
     try {
+        console.log('Creating', recipe);
         const response = await http.post("/recipe", recipe);
         return response.data;
     } catch (error) {
         console.error("Error creating recipe:", error);
+        throw error;
+    }
+};
+
+export const deleteRecipe = async (id: string): Promise<boolean> => {
+    try {
+        const response = await http.delete(`/recipe/${id}`);
+        return response.data; 
+    } catch (error) {
+        console.error("Error deleting recipe:", error);
         throw error;
     }
 };
