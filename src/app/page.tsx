@@ -64,6 +64,10 @@ function Home() {
     setSelectedCategorie(categorie);
   };
 
+  const handlerDelete = async()=>{
+      setRecipes(await fetchData());
+  }
+
   return (
     <div>
       <Header
@@ -73,7 +77,8 @@ function Home() {
         selectedTab={selectedTab}
         selectedCategory={selectedCategorie} 
       />
-      <ShowRecipes recipes={recipes} />
+
+      <ShowRecipes recipes={recipes} onDelete={handlerDelete}/>
       <PopUp/>
     </div>
   );

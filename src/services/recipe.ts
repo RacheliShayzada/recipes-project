@@ -71,3 +71,13 @@ export const createRecipe = async (recipe: Recipe): Promise<Recipe> => {
         throw error;
     }
 };
+
+export const deleteRecipe = async (id: string): Promise<boolean> => {
+    try {
+        const response = await http.delete(`/recipe/${id}`);
+        return response.data; 
+    } catch (error) {
+        console.error("Error deleting recipe:", error);
+        throw error;
+    }
+};
