@@ -9,7 +9,7 @@ import styles from "./addRecipe.module.css";
 
 const recipeSchema = z.object({
   recipe_name: z.string().min(1, "Name is required"),
-  category: z.union([z.array(z.string()), z.string()]).transform((val) => (typeof val === "string" ? [val] : val)),
+  category: z.string().min(1, "Category is required"),
   imageUrl: z.string().url("Must be a valid URL"),
   instructions: z.string().min(1, "Instructions are required"),
   shortDescription: z.string().optional(),
@@ -18,13 +18,14 @@ const recipeSchema = z.object({
 type RecipeFormData = z.infer<typeof recipeSchema>;
 
 const AddRecipe: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<RecipeFormData>({
+  const { register, handleSubmit, formState: { errors }, reset, trigger } = useForm<RecipeFormData>({
     resolver: zodResolver(recipeSchema),
   });
 
   const [ingredients, setIngredients] = useState<string[]>([""]);
   const [categories, setCategories] = useState<string[]>([]);
   const [message, setMessage] = useState<string | null>(null);
+  const [ingredientError, setIngredientError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -42,6 +43,7 @@ const AddRecipe: React.FC = () => {
     const updatedIngredients = [...ingredients];
     updatedIngredients[index] = value;
     setIngredients(updatedIngredients);
+    setIngredientError(null); 
   };
 
   const addIngredient = () => {
@@ -54,13 +56,14 @@ const AddRecipe: React.FC = () => {
 
   const onSubmit: SubmitHandler<RecipeFormData> = async (data) => {
     if (ingredients.length === 0 || ingredients.some((ingredient) => ingredient.trim() === "")) {
-      setMessage("At least one valid ingredient is required.");
+      setIngredientError("At least one valid ingredient is required.");
       return;
     }
 
     const newRecipe = {
+      _id:"",
       name: data.recipe_name,
-      category: data.category,
+      category: [data.category],
       imageUrl: data.imageUrl,
       ingredients,
       instructions: data.instructions,
@@ -75,8 +78,21 @@ const AddRecipe: React.FC = () => {
         localStorage.setItem("recipes", JSON.stringify(storedRecipes));
       }
       setMessage("Recipe saved successfully!");
+      reset();
+      setIngredients([""]);
+      setIngredientError(null); 
     } catch (error) {
       setMessage("Failed to save recipe. Please try again.");
+    }
+  };
+
+  const handleFormSubmit = async () => {
+    const isFormValid = await trigger();
+    if (ingredients.length === 0 || ingredients.some((ingredient) => ingredient.trim() === "")) {
+      setIngredientError("At least one valid ingredient is required.");
+    }
+    if (isFormValid && !ingredientError) {
+      handleSubmit(onSubmit)();
     }
   };
 
@@ -88,25 +104,38 @@ const AddRecipe: React.FC = () => {
       <h2 className={styles.title}>Add Recipe</h2>
       {message && <p className={styles.message}>{message}</p>}
 
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-        <input className={styles.input} placeholder="Meal name" {...register("recipe_name")} />
-        {errors.recipe_name && <p>{errors.recipe_name.message}</p>}
+      <form onSubmit={(e) => { e.preventDefault(); handleFormSubmit(); }} className={styles.form}>
+        <input
+          className={`${styles.input} ${errors.recipe_name ? styles.errorInput : ""}`}
+          placeholder="Meal name"
+          {...register("recipe_name")}
+        />
+        {errors.recipe_name && <p className={styles.errorMessage}>{errors.recipe_name.message}</p>}
 
-        <select className={styles.select} {...register("category")}>
+
+        <select
+          className={`${styles.select} ${errors.category ? styles.errorInput : ""}`}
+          {...register("category")}
+        >
           <option value="">Select Category</option>
           {categories.map((category, index) => (
             <option key={index} value={category}>{category}</option>
           ))}
         </select>
-        {errors.category && <p>{errors.category.message}</p>}
+        {errors.category && <p className={styles.errorMessage}>{errors.category.message}</p>}
 
-        <input className={styles.input} placeholder="Image URL" {...register("imageUrl")} />
-        {errors.imageUrl && <p>{errors.imageUrl.message}</p>}
+
+        <input
+          className={`${styles.input} ${errors.imageUrl ? styles.errorInput : ""}`}
+          placeholder="Image URL"
+          {...register("imageUrl")}
+        />
+        {errors.imageUrl && <p className={styles.errorMessage}>{errors.imageUrl.message}</p>}
 
         {ingredients.map((ingredient, index) => (
           <div key={index} className={styles.ingredientContainer}>
             <input
-              className={styles.input}
+              className={`${styles.input} ${ingredient.trim() === "" && ingredientError ? styles.errorInput : ""}`}
               placeholder="Ingredient"
               value={ingredient}
               onChange={(e) => handleIngredientChange(index, e.target.value)}
@@ -114,13 +143,23 @@ const AddRecipe: React.FC = () => {
             <button type="button" onClick={() => removeIngredient(index)}>Remove</button>
           </div>
         ))}
+        {ingredientError && <p className={styles.errorMessage}>{ingredientError}</p>}
+        
         <button type="button" className={styles.addIngredientButton} onClick={addIngredient}>+</button>
 
-        <textarea className={styles.textarea} placeholder="Instructions" {...register("instructions")}></textarea>
-        {errors.instructions && <p>{errors.instructions.message}</p>}
+        <textarea
+          className={`${styles.textarea} ${errors.instructions ? styles.errorInput : ""}`}
+          placeholder="Instructions"
+          {...register("instructions")}
+        ></textarea>
+        {errors.instructions && <p className={styles.errorMessage}>{errors.instructions.message}</p>}
 
-        <input className={styles.input} placeholder="Short Description" {...register("shortDescription")} />
-        
+        <input
+          className={styles.input}
+          placeholder="Short Description"
+          {...register("shortDescription")}
+        />
+
         <button type="submit" className={styles.addButton}>Add</button>
       </form>
     </div>
