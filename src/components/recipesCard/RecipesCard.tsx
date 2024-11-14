@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Recipe } from '@/types/types';
 import styles from './RecipesCard.module.css';
 import { useDisplayStore } from '@/services/providers/DisplayRecipeProvider'
