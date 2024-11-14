@@ -1,35 +1,29 @@
 'use client';
 
-import React, { type ReactNode, createContext, useRef, useContext } from 'react';
+import React, { type ReactNode, createContext, useContext } from 'react';
 import { useStore } from 'zustand';
-import { type FavoritesStore, createFavoritesStore } from '@/store/useFavoritesStore';
+import { useFavoritesStore, type FavoritesStore } from '@/store/useFavoritesStore';
 
-export type FavoriteStoreApi = ReturnType<typeof createFavoritesStore>;
-
-export const FavoriteContext = createContext<FavoriteStoreApi | undefined>(undefined);
+export const FavoriteContext = createContext<typeof useFavoritesStore | undefined>(undefined);
 
 export interface FavoriteProviderProp {
     children: ReactNode;
 }
 
 export const FavoriteProvider = ({ children }: FavoriteProviderProp) => {
-    const displayFavoriteRef = useRef<FavoriteStoreApi>();
-    if (!displayFavoriteRef.current) {
-        displayFavoriteRef.current = createFavoritesStore();
-    }
     return (
-        <FavoriteContext.Provider value={displayFavoriteRef.current}>
+        <FavoriteContext.Provider value={useFavoritesStore}>
             {children}
         </FavoriteContext.Provider>
     );
 };
 
-export const useFavoriteStore = <T,>(selector: (state: FavoritesStore) => T,): T => {
-    const displayFavoriteContext = useContext(FavoriteContext);
+export const useFavoriteStore = <T,>(selector: (state: FavoritesStore) => T): T => {
+    const favoriteContext = useContext(FavoriteContext);
 
-    if (!displayFavoriteContext) {
-        throw new Error(`useStore must be used within DisplayFavorite Provider`);
+    if (!favoriteContext) {
+        throw new Error(`useFavoriteStore must be used within FavoriteProvider`);
     }
 
-    return useStore(displayFavoriteContext, selector);
+    return useStore(favoriteContext, selector);
 };

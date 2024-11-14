@@ -1,3 +1,4 @@
+"use client"
 import http from "./http";
 import { Recipe } from "@/types/types";
 
@@ -15,7 +16,6 @@ export const getAllRecipes = async (): Promise<Recipe[]> => {
             const timestamp = parseInt(cachedTimestamp, 10);
 
             if (Date.now() - timestamp < CACHE_EXPIRATION) {
-                console.log("משתמשים במידע מהזיכרון");
                 return JSON.parse(cachedData);
             }
         }
