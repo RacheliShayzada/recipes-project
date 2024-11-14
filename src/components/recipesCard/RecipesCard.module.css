@@ -51,7 +51,7 @@
   }
   
   .readMore {
-    background-color: #6a0dad;
+    background-color: #7AB2D3;
     color: white;
     padding: 5px 10px;
     border: none;
@@ -61,7 +61,7 @@
   }
   
   .readMore:hover {
-    background-color: #5c09a8;
+    background-color: #4f7b95;
   }
 
   .headerContent{
