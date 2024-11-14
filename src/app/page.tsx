@@ -5,10 +5,10 @@ import ShowRecipes from '@/components/ShowRecipes/ShowRecipes';
 import { getAllRecipes } from '@/services/recipe';
 import { Recipe } from '@/types/types';
 import React, { useEffect, useState } from 'react';
-import { useDisplayStore } from '@/services/providers/DisplayFavoriteProvaider';
+import { useFavoriteStore } from '@/services/providers/DisplayFavoriteProvaider';
 
 function Home() {
-  const {favoriteIds} = useDisplayStore((state)=>state)
+  const {favoriteIds} = useFavoriteStore((state)=>state)
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTab, setSelectedTab] = useState('all');
@@ -33,6 +33,7 @@ function Home() {
     fetchAndSetRecipes();
   }, []);
 
+  
   const filteredRecipes = async () => {
     let filtered = await fetchData();
 
@@ -52,7 +53,7 @@ function Home() {
 
   useEffect(() => {
     filteredRecipes();
-  }, [searchTerm, selectedCategorie, selectedTab]);
+  }, [searchTerm, selectedCategorie, selectedTab, favoriteIds]);
 
   const handleSearch = (search: string) => {
     setSearchTerm(search);

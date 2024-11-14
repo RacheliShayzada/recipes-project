@@ -2,33 +2,33 @@
 
 import React, { type ReactNode, createContext, useRef, useContext } from 'react';
 import { useStore } from 'zustand';
-import { type DisplayState, type DisplayStore, createDisplayFavoritesStore } from '@/store/useFavoritesStore';
+import { type FavoritesStore, createFavoritesStore } from '@/store/useFavoritesStore';
 
-export type DisplayFavoriteStoreApi = ReturnType<typeof createDisplayFavoritesStore>;
+export type FavoriteStoreApi = ReturnType<typeof createFavoritesStore>;
 
-export const DisplayFavoriteContext = createContext<DisplayFavoriteStoreApi | undefined>(undefined);
+export const FavoriteContext = createContext<FavoriteStoreApi | undefined>(undefined);
 
-export interface DisplayFavoriteProviderProp {
+export interface FavoriteProviderProp {
     children: ReactNode;
 }
 
-export const DisplayFavoriteProvider = ({ children }: DisplayFavoriteProviderProp) => {
-    const displayFavoriteRef = useRef<DisplayFavoriteStoreApi>();
+export const FavoriteProvider = ({ children }: FavoriteProviderProp) => {
+    const displayFavoriteRef = useRef<FavoriteStoreApi>();
     if (!displayFavoriteRef.current) {
-        displayFavoriteRef.current = createDisplayFavoritesStore();
+        displayFavoriteRef.current = createFavoritesStore();
     }
     return (
-        <DisplayFavoriteContext.Provider value={displayFavoriteRef.current}>
+        <FavoriteContext.Provider value={displayFavoriteRef.current}>
             {children}
-        </DisplayFavoriteContext.Provider>
+        </FavoriteContext.Provider>
     );
 };
 
-export const useDisplayStore = <T,>(selector: (state: DisplayStore) => T,): T => {
-    const displayFavoriteContext = useContext(DisplayFavoriteContext);
+export const useFavoriteStore = <T,>(selector: (state: FavoritesStore) => T,): T => {
+    const displayFavoriteContext = useContext(FavoriteContext);
 
     if (!displayFavoriteContext) {
-        throw new Error(`useStore must be used within DisplayRecipe Provider`);
+        throw new Error(`useStore must be used within DisplayFavorite Provider`);
     }
 
     return useStore(displayFavoriteContext, selector);

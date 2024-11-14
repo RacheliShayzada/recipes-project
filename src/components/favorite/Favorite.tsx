@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './favorite.module.css';
-import { useDisplayStore } from '@/services/providers/DisplayFavoriteProvaider';
+import { useFavoriteStore } from '@/services/providers/DisplayFavoriteProvaider';
 
 type FavoriteProps = {
     recipeId?: string;
@@ -8,20 +8,19 @@ type FavoriteProps = {
 
 function Favorite({ recipeId }: FavoriteProps) {
     const [favorite, setFavorite] = useState<boolean>(false);
-    const {favoriteIds } = useDisplayStore((state)=>state)
+    const { favoriteIds, removeFavorite, addFavorite } = useFavoriteStore((state) => state)
 
     useEffect(() => {
-        if (!recipeId) return; 
+        if (!recipeId) return;
         setFavorite(favoriteIds.includes(recipeId));
-    }, [recipeId]); 
+    }, [recipeId]);
+
 
     const toggleFavoriteInLocalStorage = () => {
-        if (!recipeId) return; 
-        if(favorite)
-
+        if (!recipeId) return;
+        favorite ? removeFavorite(recipeId) : addFavorite(recipeId);
         setFavorite(!favorite);
     };
-
     return (
         <span
             className={styles.favoriteStar}

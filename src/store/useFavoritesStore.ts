@@ -1,37 +1,36 @@
-import { init } from 'next/dist/compiled/webpack/webpack';
+'use client';
+
 import { createStore } from 'zustand';
 
-
-export type DisplayState = {
+export type FavoriteState = {
     favoriteIds: string[];
 }
 
-export type FavoritesStore = {
+export type FavoritesAction = {
     addFavorite: (recipeId: string) => void;
     removeFavorite: (recipeId: string) => void;
-    initFavorite: () => void;
 };
 
-export type DisplayStore = DisplayState & FavoritesStore
+export type FavoritesStore = FavoriteState & FavoritesAction
 
 const addFavoriteToLocalStorage = (recipeId: string) => {
-    const favorites: string[] = JSON.parse(localStorage.getItem('favorite') || '[]');
+    const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
     favorites.push(recipeId);
-    localStorage.setItem('favorite', JSON.stringify(favorites));
+    localStorage.setItem('favorites', JSON.stringify(favorites));
 }
 
 const removeFavoritefromLocalStorage = (recipeId: string) => {
-    const favorites: string[] = JSON.parse(localStorage.getItem('favorite') || '[]');
+    const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
     const filtered = favorites.filter(id => id !== recipeId);
-    localStorage.setItem('favorite', JSON.stringify(filtered));
+    localStorage.setItem('favorites', JSON.stringify(filtered));
 }
 
-export const defaultDisplayState:DisplayState = {
-    favoriteIds: [],
+export const defaultDisplayState: FavoriteState = {
+    favoriteIds: JSON.parse(localStorage.getItem('favorites') || '[]'),
 }
 
-export const createDisplayFavoritesStore = (initState:DisplayState = defaultDisplayState)=>{
-    return createStore<DisplayState>()((set)=>({
+export const createFavoritesStore = (initState: FavoriteState = defaultDisplayState)=>{
+    return createStore<FavoritesStore>()((set)=>({
     ...initState,
     addFavorite: (recipeId:string) => set((state) => {
         addFavoriteToLocalStorage(recipeId);
@@ -45,10 +44,4 @@ export const createDisplayFavoritesStore = (initState:DisplayState = defaultDisp
             favoriteIds: state.favoriteIds.filter(id => id !== recipeId),
         })
     }),
-    initFavorite: () => set((state) => {
-        const favorites: string[] = JSON.parse(localStorage.getItem('favorite') || '[]');
-        return ({
-            favoriteIds: [...favorites],
-        })
-    })
 }))};
