@@ -14,15 +14,19 @@ export type FavoritesAction = {
 export type FavoritesStore = FavoriteState & FavoritesAction
 
 const addFavoriteToLocalStorage = (recipeId: string) => {
-    const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
-    favorites.push(recipeId);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+    if(typeof window !== 'undefined'){
+        const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
+        favorites.push(recipeId);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
 }
 
 const removeFavoritefromLocalStorage = (recipeId: string) => {
+    if(typeof window !== 'undefined'){
     const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
     const filtered = favorites.filter(id => id !== recipeId);
     localStorage.setItem('favorites', JSON.stringify(filtered));
+    }
 }
 
 export const defaultDisplayState: FavoriteState = {
