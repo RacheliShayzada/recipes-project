@@ -5,8 +5,10 @@ import ShowRecipes from '@/components/ShowRecipes/ShowRecipes';
 import { getAllRecipes } from '@/services/recipe';
 import { Recipe } from '@/types/types';
 import React, { useEffect, useState } from 'react';
+import { useDisplayStore } from '@/services/providers/DisplayFavoriteProvaider';
 
 function Home() {
+  const {favoriteIds} = useDisplayStore((state)=>state)
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTab, setSelectedTab] = useState('all');
@@ -35,8 +37,8 @@ function Home() {
     let filtered = await fetchData();
 
     if (selectedTab === 'favorites') {
-      const favoriteRecipes: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
-      filtered = (await filtered).filter(recipe => favoriteRecipes.includes(recipe._id||''));
+
+      filtered = filtered.filter(recipe => favoriteIds.includes(recipe._id||''));
     }
     if (selectedCategorie) {
       filtered = filtered.filter(recipe => recipe.category.includes(selectedCategorie));

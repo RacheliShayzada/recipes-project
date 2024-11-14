@@ -7,7 +7,6 @@ import Favorite from '../favorite/Favorite';
 
 export default function PopUp(){
     const { isModalOpen, selectedRecipe, closeModal } = useDisplayStore((state) => state,)
-    const [favorite, setFavorite] = useState<boolean>(false);
 
     return(
         <>

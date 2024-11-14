@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './favorite.module.css';
+import { useDisplayStore } from '@/services/providers/DisplayFavoriteProvaider';
 
 type FavoriteProps = {
     recipeId?: string;
@@ -7,21 +8,17 @@ type FavoriteProps = {
 
 function Favorite({ recipeId }: FavoriteProps) {
     const [favorite, setFavorite] = useState<boolean>(false);
+    const {favoriteIds } = useDisplayStore((state)=>state)
 
     useEffect(() => {
         if (!recipeId) return; 
-        const favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-        setFavorite(favorites.includes(recipeId));
+        setFavorite(favoriteIds.includes(recipeId));
     }, [recipeId]); 
 
     const toggleFavoriteInLocalStorage = () => {
         if (!recipeId) return; 
-        const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
-        const updatedFavorites = favorite
-            ? favorites.filter(id => id !== recipeId)
-            : [...favorites, recipeId];
-            
-        localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+        if(favorite)
+
         setFavorite(!favorite);
     };
 
