@@ -1,6 +1,7 @@
 'use client';
 
-import { createStore } from 'zustand';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type FavoriteState = {
     favoriteIds: string[];
@@ -11,37 +12,26 @@ export type FavoritesAction = {
     removeFavorite: (recipeId: string) => void;
 };
 
-export type FavoritesStore = FavoriteState & FavoritesAction
+export type FavoritesStore = FavoriteState & FavoritesAction;
 
-const addFavoriteToLocalStorage = (recipeId: string) => {
-    const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
-    favorites.push(recipeId);
-    localStorage.setItem('favorites', JSON.stringify(favorites));
-}
+export const useFavoritesStore = create<FavoritesStore>()(
+    persist(
+        (set) => ({
+            favoriteIds: [],
+            addFavorite: (recipeId: string) =>
+                set((state) => ({
+                    favoriteIds: [...state.favoriteIds, recipeId],
+                })),
+            removeFavorite: (recipeId: string) =>
+                set((state) => ({
+                    favoriteIds: state.favoriteIds.filter((id) => id !== recipeId),
+                })),
+        }),
+        {
+            name: 'favorites-storage', // Storage key name
+        }
+    )
+);
 
-const removeFavoritefromLocalStorage = (recipeId: string) => {
-    const favorites: string[] = JSON.parse(localStorage.getItem('favorites') || '[]');
-    const filtered = favorites.filter(id => id !== recipeId);
-    localStorage.setItem('favorites', JSON.stringify(filtered));
-}
-
-export const defaultDisplayState: FavoriteState = {
-    favoriteIds: JSON.parse(localStorage.getItem('favorites') || '[]'),
-}
-
-export const createFavoritesStore = (initState: FavoriteState = defaultDisplayState)=>{
-    return createStore<FavoritesStore>()((set)=>({
-    ...initState,
-    addFavorite: (recipeId:string) => set((state) => {
-        addFavoriteToLocalStorage(recipeId);
-        return ({
-            favoriteIds: [...state.favoriteIds, recipeId],
-        })
-    }),
-    removeFavorite: (recipeId:string) => set((state) => {
-        removeFavoritefromLocalStorage(recipeId);
-        return ({
-            favoriteIds: state.favoriteIds.filter(id => id !== recipeId),
-        })
-    }),
-}))};
+// Define FavoriteStoreApi based on useFavoritesStore instead of createFavoritesStore
+export type FavoriteStoreApi = typeof useFavoritesStore;
