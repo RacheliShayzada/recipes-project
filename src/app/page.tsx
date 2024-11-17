@@ -5,7 +5,7 @@ import ShowRecipes from '@/components/ShowRecipes/ShowRecipes';
 import { getAllRecipes } from '@/services/recipe';
 import { Recipe } from '@/types/types';
 import React, { useEffect, useState } from 'react';
-import { useFavoriteStore } from '@/services/providers/DisplayFavoriteProvaider';
+import { useFavoriteStore } from '@/services/providers/FavoriteProvider';
 
 function Home() {
   const {favoriteIds} = useFavoriteStore((state)=>state)

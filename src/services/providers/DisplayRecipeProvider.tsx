@@ -3,7 +3,7 @@
 import React from 'react'
 import { type ReactNode, createContext, useRef, useContext } from 'react'
 import { useStore } from 'zustand'
-import { type DisplayStore, createDisplayRecipeStore } from '@/store/RecipeProvider'
+import { type DisplayStore, createDisplayRecipeStore } from '@/store/useDisplayRecipeStore'
 
 export type DisplayRecipeStoreApi = ReturnType<typeof createDisplayRecipeStore>
 
