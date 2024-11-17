@@ -28,10 +28,9 @@ export const useFavoritesStore = create<FavoritesStore>()(
                 })),
         }),
         {
-            name: 'favorites-storage', // Storage key name
+            name: 'favorites-storage', 
         }
     )
 );
 
-// Define FavoriteStoreApi based on useFavoritesStore instead of createFavoritesStore
 export type FavoriteStoreApi = typeof useFavoritesStore;

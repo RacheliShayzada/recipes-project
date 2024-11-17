@@ -18,7 +18,6 @@ export const defaultDisplayState: DisplayState = {
     selectedRecipe: null,
 };
 
-// DisplayRecipeProvider
 export const createDisplayRecipeStore = (initState: DisplayState = defaultDisplayState) => {
     return createStore<DisplayStore>()((set) => ({
         ...initState,

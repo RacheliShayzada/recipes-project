@@ -16,7 +16,6 @@ function RecipesCard({ recipe, onDelete }: RecipesCardProps) {
   const { openModal } = useDisplayStore((state) => state,);
   
   const deleteCard = async () => {
-    console.log('deleting card');
     try {
       await deleteRecipe(recipe._id!);
       const storedRecipes = JSON.parse(localStorage.getItem("recipes") || "null");
@@ -29,7 +28,6 @@ function RecipesCard({ recipe, onDelete }: RecipesCardProps) {
       const updatedFavorites = favorites.filter((favoriteId: string) => {favoriteId !== recipe._id});
       localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
       onDelete();
-      console.log("Recipe deleted successfully!");
     } catch (error) {
       console.log("Failed to delete recipe. Please try again.");
     }
