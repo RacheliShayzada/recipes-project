@@ -8,7 +8,6 @@ export async function GET(request: Request) {
         const documents = await getAllDocuments(client, 'recipes');
         return NextResponse.json({ documents });
     } catch (error) {
-        // Handle errors
         return NextResponse.json({ message: 'Failed to fetch documents' }, { status: 500 });
     }
 }
