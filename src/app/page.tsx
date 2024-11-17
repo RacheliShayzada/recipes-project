@@ -27,7 +27,6 @@ function Home() {
   useEffect(() => {
     const fetchAndSetRecipes = async () => {
       const res: any = await fetchData();
-      console.log(res)
       setRecipes(res || []);
     };
     fetchAndSetRecipes();
