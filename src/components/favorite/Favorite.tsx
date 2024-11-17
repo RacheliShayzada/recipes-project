@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './favorite.module.css';
-import { useFavoriteStore } from '@/services/providers/DisplayFavoriteProvaider';
+import { useFavoriteStore } from '@/services/providers/FavoriteProvider';
 
 type FavoriteProps = {
     recipeId?: string;
